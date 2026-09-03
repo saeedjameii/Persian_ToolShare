@@ -14,6 +14,11 @@
 
 @section('content')
     <main class="auth-page">
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
         <div class="auth-card">
             <a class="logo auth-logo" href="#"><span class="logo-icon">🔧</span>ToolShare</a>
             <h1>حساب کاربری خود را ایجاد کنید</h1>

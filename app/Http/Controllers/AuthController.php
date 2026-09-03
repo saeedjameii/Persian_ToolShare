@@ -26,9 +26,15 @@ class AuthController extends Controller
         ]);
 
         try{
-            $birthDate = Jalalian::fromFormat('Y/m/d', $request->birth_date)->toCarbon()->format('Y-m-d');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'تاریخ تولد وارد شده معتبر نیست. لطفاً از فرمت YYYY/MM/DD استفاده کنید.');
+            $jalaliDate = Jalalian::fromFormat('Y/m/d', $request->birth_date);
+
+            if ($jalaliDate->format('Y/m/d') !== $request->birth_date) {
+                throw new \InvalidArgumentException('Invalid Jalali date after normalization.');
+            }
+
+            $birthDate = $jalaliDate->toCarbon()->format('Y-m-d');
+        } catch (\Throwable $e) {
+            return redirect()->back()->withInput()->withErrors(['birth_date' => 'تاریخ تولد وارد شده معتبر نیست. لطفاً از فرمت YYYY/MM/DD استفاده کنید (مثلاً 1405/06/12).']);
         }
 
         $user = User::create([
