@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Morilog\Jalali\Jalalian;
 
@@ -47,10 +48,33 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        Auth::login($user);
+
         if (!$user) {
             return redirect()->back()->with('error', 'ثبت نام با مشکل مواجه شد. لطفاً دوباره تلاش کنید.');
         }
 
         return redirect()->route('home')->with('success', 'ثبت نام موفقیت‌آمیز بود. لطفاً وارد شوید.');
+    }
+
+    public function login(){
+        return view('auth.login');
+    }
+
+    public function loginPost(Request $request){
+    
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+
+        $credentials = $request->only('email', 'password');
+
+        if (!$token = auth('api')->attempt($credentials)) {
+            return redirect()->back()->withInput()->withErrors(['email' => 'ایمیل یا رمز عبور اشتباه است.']);
+        }
+
+        return redirect()->route('home')->withCookie(cookie('token', $token, 60))->with('success', 'ورود موفقیت‌آمیز بود.');
     }
 }

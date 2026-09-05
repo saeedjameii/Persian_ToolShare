@@ -9,7 +9,7 @@
 
 @section('header-actions')
     <a class="btn btn-secondary" href="{{ route('home') }}">خانه</a>
-    <a class="btn btn-primary" href="#">ورود</a>
+    <a class="btn btn-primary" href="{{ route('login') }}">ورود</a>
 @endsection
 
 @section('content')
@@ -106,7 +106,7 @@
                 </button>
             </form>
             <p class="auth-switch">
-                قبلاً حساب کاربری ایجاد کرده‌اید؟ <a href="#">ورود کنید</a>
+                قبلاً حساب کاربری ایجاد کرده‌اید؟ <a href="{{ route('login') }}">ورود کنید</a>
             </p>
         </div>
     </main>

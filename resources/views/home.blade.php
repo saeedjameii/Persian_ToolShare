@@ -1,5 +1,14 @@
 @extends('layout.master')
 
+@section('header-actions')
+@if (auth('api')->check())
+    {{ auth('api')->user()->first_name }}
+@else
+  <a class="btn btn-secondary" href="{{ route("login") }}">ورود</a>
+  <a class="btn btn-primary" href="{{ route('signUp') }}">ثبت‌نام  </a>
+@endif
+@endsection
+
 @section('content')
 <main>
   @if(session('success'))
@@ -24,7 +33,7 @@
         </p>
         <div class="hero-buttons">
           <a class="btn btn-primary" href="#">مشاهده ابزار ها</a>
-          <a class="btn btn-secondary" href="#">ثبت ابزار</a>
+          <a class="btn btn-secondary" href="{{ route('create_post') }}">ثبت ابزار</a>
         </div>
       </div>
       <div class="hero-image">

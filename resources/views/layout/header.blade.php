@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@yield('title', 'ToolShare — Borrow more. Buy less.')</title>
 
-@vite(['resources/css/style.css'])
+@vite(['resources/css/style.css', 'resources/js/create-post.js'])
 
 </head>
 <body>
@@ -29,7 +29,7 @@
             @hasSection('header-actions')
                 @yield('header-actions')
             @else
-                <a class="btn btn-secondary" href="#">
+                <a class="btn btn-secondary" href="{{ route('login') }}">
                     ورود
                 </a>
                 <a class="btn btn-primary" href="{{ route('signUp') }}">
