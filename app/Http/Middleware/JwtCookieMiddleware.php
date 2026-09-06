@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,7 +24,7 @@ class JwtCookieMiddleware
             JWTAuth::setToken($token)->authenticate();
         }
         catch(\Throwable $e){
-            return redirect()->route('login')->withErrors(['email' => 'لطفا ابتدا وارد حساب خود شوید.']);
+            return redirect()->route('login')->withCookie(cookie()->forget('token'))->withErrors(['email' => 'لطفا ابتدا وارد حساب خود شوید.']);
         }
         return $next($request);
     }
