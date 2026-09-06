@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use App\Models\Role;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -53,5 +54,23 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function posts(){
+        return $this->hasMany(Post::class);
+    }
+
+    public function roles(){
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function hasRole(string $role): bool{
+        return $this->roles()->where('name', $role)->exists();
+    }
+
+    public function hasPermission(string $permission): bool{
+        return $this->roles()->whereHas('permissions', function($query) use ($permission){
+            $query->where('name', $permission);
+        })->exists();
     }
 }
