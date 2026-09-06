@@ -20,7 +20,7 @@ class JwtCookieMiddleware
 
         try
         {
-            $user = JWTAuth::setToken($token)->authenticate();
+            JWTAuth::setToken($token)->authenticate();
         }
         catch(\Throwable $e){
             return redirect()->route('login')->withErrors(['email' => 'لطفا ابتدا وارد حساب خود شوید.']);
