@@ -4,11 +4,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\JwtCookieMiddleware;
-use App\Http\Middleware\HomeJwtCookieMiddleware;
 
 Route::get('/', function () {
     return view('home');
-})->middleware(HomeJwtCookieMiddleware::class)->name('home');
+})->name('home');
 
 Route::get('sign-up', [AuthController::class, 'signUp'])->name('signUp');
 Route::post('sign-up', [AuthController::class, 'signUpPost'])->name('signUp.post');
