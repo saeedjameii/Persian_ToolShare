@@ -17,3 +17,7 @@ Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
 
 Route::get('/create', [PostController::class, 'create'])->middleware(JwtCookieMiddleware::class)->name('create_post');
 Route::post('/create', [PostController::class, 'createPost'])->middleware(JwtCookieMiddleware::class)->name('create_post.post');
+
+Route::get('/test-category-permission', function () {
+    return 'You have create-category permission!';
+})->middleware('permission:create-category');
