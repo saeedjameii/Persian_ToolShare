@@ -2,6 +2,7 @@
 
 @section('header-actions')
 @if (auth('api')->check())
+  <a class="btn btn-secondary" href="{{ route("categories.index") }}">دسته‌بندی‌ها</a>
     {{ auth('api')->user()->first_name }}
 @else
   <a class="btn btn-secondary" href="{{ route("login") }}">ورود</a>

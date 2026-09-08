@@ -770,3 +770,35 @@ a:focus-visible { outline: 3px solid rgba(41, 93, 67, 0.22); outline-offset: 2px
     height: 340px;
   }
 }
+
+.category-node-name {
+  font-weight: 700;
+  color: var(--charcoal);
+}
+ 
+.category-node-children {
+  margin-inline-start: 12px;
+  padding-inline-start: 18px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-inline-start: 2px solid var(--line);
+}
+ 
+.category-node-children .category-node-name {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--muted);
+  position: relative;
+}
+ 
+.category-node-children .category-node-name::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: -18px;
+  top: 50%;
+  width: 12px;
+  height: 2px;
+  background: var(--line);
+}

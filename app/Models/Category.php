@@ -19,4 +19,15 @@ class Category extends Model
     public function posts(){
         return $this->hasMany(Post::class);
     }
+
+    public function descendants(){
+        $descendants = collect();
+
+        foreach($this->children as $child){
+            $descendants->push($child);
+
+            $descendants = $descendants->merge($child->descendants());
+        }
+        return $descendants;
+    }
 }
