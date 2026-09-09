@@ -68,7 +68,7 @@
               <small>مالک: {{ $post->user->first_name }}</small>
               <div class="card-bottom">
                 <span class="price">{{ $post->first_day_price }} تومان در روز</span>
-                <a href="#">جزئیات بیشتر</a>
+                <a href="{{ route('posts.show', $post) }}">جزئیات بیشتر</a>
               </div>
             </div>
           </article>

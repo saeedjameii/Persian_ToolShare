@@ -1,0 +1,168 @@
+@extends('layout.master')
+
+@section('content')
+
+<main class="page-area">
+    <div class="main-content">
+
+        <section class="intro">
+            <p class="kicker">مدیریت ابزار</p>
+            <h1 class="display-font">ویرایش پست</h1>
+        </section>
+
+        <div class="workspace">
+            <form action="{{ route('posts.update', $post) }}" method="POST" class="form-card">
+
+                @csrf
+                @method('PUT')
+
+                <div class="field-grid">
+
+                    <div class="field full-field">
+                        <label>عنوان</label>
+
+                        <input
+                            class="form-control @error('title') is-invalid @enderror"
+                            type="text"
+                            name="title"
+                            value="{{ old('title', $post->title) }}"
+                        >
+
+                        @error('title')
+                            <span class="validation-message" style="display:block;">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+
+                    <div class="field full-field">
+                        <label>توضیحات</label>
+
+                        <textarea class="form-control @error('description') is-invalid @enderror" name="description">{{ old('description', $post->description) }}</textarea>
+
+                        @error('description')
+                            <span class="validation-message" style="display:block;">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+
+                    <div class="field full-field">
+                        <label>دسته‌بندی</label>
+
+                        <select class="form-control @error('category_id') is-invalid @enderror" name="category_id">
+
+                            @foreach($categories as $category)
+
+                                <option
+                                    value="{{ $category->id }}"
+                                    {{ old('category_id', $post->category_id) == $category->id ? 'selected' : '' }}
+                                >
+                                    {{ $category->name }}
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                        @error('category_id')
+                            <span class="validation-message" style="display:block;">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+
+                    <div class="field">
+                        <label for="condition">شرایط ابزار</label>
+                        <select class="form-control" id="condition" name="condition" value="{{ old('condition') }}">
+                            <option value="">شرایط ابزار را انتخاب کنید</option>
+                            <option>جدید</option>
+                            <option>تقریباً جدید</option>
+                            <option>خوب</option>
+                            <option>معمولی</option>
+                        </select>
+                        <span class="validation-message" id="condition-error"></span>
+                    </div>
+
+
+                    <div class="field">
+                        <label>موقعیت</label>
+
+                        <input
+                            class="form-control"
+                            type="text"
+                            name="location"
+                            value="{{ old('location', $post->location) }}"
+                        >
+                    </div>
+
+
+                    <div class="field">
+                        <label>قیمت روز اول</label>
+
+                        <div class="currency-wrap">
+                            <input
+                                class="form-control"
+                                type="number"
+                                step="0.01"
+                                name="first_day_price"
+                                value="{{ old('first_day_price', $post->first_day_price) }}"
+                            >
+                        </div>
+                    </div>
+
+
+                    <div class="field">
+                        <label>قیمت هر روز اضافه</label>
+
+                        <div class="currency-wrap">
+                            <input
+                                class="form-control"
+                                type="number"
+                                step="0.01"
+                                name="extra_day_price"
+                                value="{{ old('extra_day_price', $post->extra_day_price) }}"
+                            >
+                        </div>
+                    </div>
+
+
+                    <div class="field">
+                        <label>قابل استفاده از</label>
+
+                        <input
+                            class="form-control"
+                            type="date"
+                            name="available_from"
+                            value="{{ old('available_from', $post->available_from) }}"
+                        >
+                    </div>
+
+
+                    <div class="field">
+                        <label>قابل استفاده تا</label>
+
+                        <input
+                            class="form-control"
+                            type="date"
+                            name="available_untill"
+                            value="{{ old('available_untill', $post->available_untill) }}"
+                        >
+                    </div>
+
+                </div>
+
+                <div style="display:flex; align-items:center; gap:14px; margin-top:8px;">
+                    <button type="submit" class="button button-primary">
+                        به‌روزرسانی پست
+                    </button>
+
+                    <a href="{{ route('posts.show', $post) }}" class="browse-link">
+                        انصراف
+                    </a>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</main>
+
+@endsection

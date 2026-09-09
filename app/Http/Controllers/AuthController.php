@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,6 +48,10 @@ class AuthController extends Controller
             'national_code' => $request->national_code,
             'password' => Hash::make($request->password),
         ]);
+
+        $role = Role::where('name', 'user')->firstOrFail();
+
+        $user->roles()->attach($role->id);
 
         Auth::login($user);
 

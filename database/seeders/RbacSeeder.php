@@ -16,7 +16,6 @@ class RbacSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
-            'create-post',
             'update-own-post',
             'delete-own-post',
             'update-any-post',
@@ -50,6 +49,9 @@ class RbacSeeder extends Seeder
         $admin->permissions()->sync(Permission::all());
 
         $creator->permissions()->sync(Permission::WhereIn('name', [
+            'create-post',
+            'update-own-post',
+            'delete-own-post',
             'create-category',
             'update-category',
             'delete-category',

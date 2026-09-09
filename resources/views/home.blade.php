@@ -33,7 +33,7 @@
            بدون اینکه وسیله‌ای را که فقط یک‌بار به آن نیاز داری خریداری کنی، کار خود را انجام بده.
         </p>
         <div class="hero-buttons">
-          <a class="btn btn-primary" href="#">مشاهده ابزار ها</a>
+          <a class="btn btn-primary" href="{{ route('posts.index') }}">مشاهده ابزار ها</a>
           <a class="btn btn-secondary" href="{{ route('create_post') }}">ثبت ابزار</a>
         </div>
       </div>

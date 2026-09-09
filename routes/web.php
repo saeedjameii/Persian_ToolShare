@@ -18,8 +18,13 @@ Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
 
 Route::get('/create', [PostController::class, 'create'])->middleware(JwtCookieMiddleware::class)->name('create_post');
 Route::post('/create', [PostController::class, 'createPost'])->middleware(JwtCookieMiddleware::class)->name('create_post.post');
+
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+
+Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->middleware(JwtCookieMiddleware::class)->name('posts.edit');
+Route::put('/posts/{post}', [PostController::class, 'update'])->middleware(JwtCookieMiddleware::class)->name('posts.update');
+Route::delete('/posts/{post}', [PostController::class, 'destroy'])->middleware(JwtCookieMiddleware::class)->name('posts.destroy');
 
 // Route::get('/test-category-permission', function () {
 //     return 'You have create-category permission!';

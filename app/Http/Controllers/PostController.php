@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class PostController extends Controller
 {
@@ -38,8 +40,13 @@ class PostController extends Controller
 
         unset($data['images']);
 
-        $data['user_id'] = auth('api')->id();
 
+        $token = $request->cookie('token');
+
+        $user = JWTAuth::setToken($token)->authenticate();
+
+        $data['user_id'] = $user->id;
+        
         $post = Post::create($data);
 
         foreach ($images as $image) {
@@ -56,5 +63,45 @@ class PostController extends Controller
         $posts = Post::with(['category', 'images', 'user'])->latest()->get();
 
         return view('tools.index', compact('posts'));
+    }
+
+    public function show(Post $post){
+        $post->load(['category', 'images', 'user']);
+
+        return view('tools.show', compact('post'));
+    }
+
+    public function edit(Post $post)
+    {
+
+        Gate::authorize('update', $post);
+        
+        $categories = Category::all();
+
+        return view('tools.edit', compact('post', 'categories'));
+    }
+
+    public function update(Request $request, Post $post){
+        Gate::authorize('update', $post);
+
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+
+            'category_id' => 'required|exists:categories,id',
+
+            'condition' => 'required|string',
+            'location' => 'required|string',
+
+            'first_day_price' => 'nullable|numeric|min:0',
+            'extra_day_price' => 'nullable|numeric|min:0',
+
+            'available_from' => 'nullable|date',
+            'available_untill' => 'nullable|date|after_or_equal:available_from',
+        ]);
+
+        $post->update($data);
+
+        return redirect()->route('posts.show', $post)->with('success', 'پست با موفقیت ویرایش شد.');
     }
 }
