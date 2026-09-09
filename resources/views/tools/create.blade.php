@@ -19,7 +19,7 @@
             </section>
 
             <div class="workspace">
-                <form action="#" method="POST" enctype="multipart/form-data" id="listing-form">
+                <form action="{{ route('create_post.post') }}" method="POST" enctype="multipart/form-data" id="listing-form">
                     @csrf
                     @if ($errors->any())
                         <div class="validation-message" style="display:block;margin-bottom:16px;">
@@ -58,9 +58,9 @@
                                 <label for="category">دسته‌بندی</label>
                                 <select class="form-control" id="category" name="category_id" value="{{ old('category_id') }}">
                                     <option value="">یک دسته‌بندی را انتخاب کنید</option>
-                                    {{-- @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->title }}</option>
-                                    @endforeach --}}
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}" @selected(old('category_id') == $category->id)>{{ $category->name }}</option>
+                                    @endforeach
                                 </select>
                                 <span class="validation-message" id="category-error"></span>
                             </div>

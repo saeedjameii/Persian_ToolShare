@@ -73,4 +73,8 @@ class User extends Authenticatable implements JWTSubject
             $query->where('name', $permission);
         })->exists();
     }
+
+    public function image(){
+        return $this->morphMany(Image::class, 'imageable');
+    }
 }

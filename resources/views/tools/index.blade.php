@@ -1,0 +1,81 @@
+@extends('layout.master')
+
+@section('header-actions')
+@if (auth('api')->check())
+  <a class="btn btn-secondary" href="{{ route("categories.index") }}">دسته‌بندی‌ها</a>
+    {{ auth('api')->user()->first_name }}
+@else
+  <a class="btn btn-secondary" href="{{ route("login") }}">ورود</a>
+  <a class="btn btn-primary" href="{{ route('signUp') }}">ثبت‌نام  </a>
+@endif
+@endsection
+
+@section('content')
+    <main>
+      <section class="browse-header">
+        <div class="container">
+          <div class="kicker">بازار</div>
+          <h1 class="section-title">مرور ابزارها</h1>
+          <p style="color: var(--muted); max-width: 650px; line-height: 1.7">
+            ابزارهای مفید را از افراد جامعه خود پیدا کنید و دقیقاً همان چیزی را
+            که نیاز دارید، امانت بگیرید.
+          </p>
+          <form class="search-box">
+            <input
+              class="search"
+              type="search"
+              placeholder="جستجو برای ابزارها..."/>
+            <select class="select">
+              <option>همه دسته‌بندی‌ها</option>
+                @foreach($posts->pluck('category')->unique('id') as $category)
+                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
+            <select class="select">
+              <option>همه مکان‌ها</option>
+                @foreach ($posts->pluck('location')->unique() as $location)
+                    <option value="{{ $location }}">{{ $location }}</option>
+                @endforeach
+            </select
+            ><select class="select">
+              <option>توصیه‌شده</option>
+              <option>کمترین قیمت</option>
+              <option>جدیدترین</option>
+            </select>
+          </form>
+        </div>
+      </section>
+      <section>
+        <div class="container browse-grid">
+        @forelse ($posts as $post)
+          <article class="tool-card">
+            @if ($post->images->isNotEmpty())
+                <img
+                 class="tool-image"
+                  src="{{ asset('storage/' . $post->images->first()->path) }}"
+                  alt="{{ $post->title }}"
+                />
+            
+            @else
+                <div class='tool-image'>
+                    <p>تصویر موجود نیست</p>
+                </div>
+            @endif
+            <div class="tool-body">
+              <span class="tag">امروز موجود</span>
+              <h3>{{ $post->title }}</h3>
+              <p>{{ $post->description }}</p>
+              <small>مالک: {{ $post->user->first_name }}</small>
+              <div class="card-bottom">
+                <span class="price">{{ $post->first_day_price }} تومان در روز</span>
+                <a href="#">جزئیات بیشتر</a>
+              </div>
+            </div>
+          </article>
+        @empty
+            <p>هیچ ابزاری برای نمایش وجود ندارد.</p>
+        @endforelse
+        </div>
+      </section>
+    </main>
+@endsection

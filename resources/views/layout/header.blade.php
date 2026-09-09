@@ -20,7 +20,7 @@
         @else
             <div class="nav-links">
                 <a href="{{ route('home') }}">خانه</a>
-                <a href="#">مشاهده ابزارها</a>
+                <a href="{{ route('posts.index') }}">مشاهده ابزارها</a>
                 <a href="#how">نحوه کار</a>
             </div>
 

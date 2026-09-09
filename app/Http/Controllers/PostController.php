@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -9,7 +10,8 @@ class PostController extends Controller
 {
     public function create()
     {
-        return view('tools.create');
+        $categories = Category::all();
+        return view('tools.create', compact('categories'));
     }
 
     public function createPost(Request $request){
@@ -27,6 +29,7 @@ class PostController extends Controller
 
             'available_from' => 'nullable|date',
             'available_untill' => 'nullable|date|after_or_equal:available_from',
+
             'images' => 'required|array|max:5',
             'images.*' => 'image|max:5120',
         ]);
@@ -39,17 +42,19 @@ class PostController extends Controller
 
         $post = Post::create($data);
 
-
-        foreach ($images as $index => $image) {
+        foreach ($images as $image) {
 
             $path = $image->store('posts', 'public');
 
             $post->images()->create([
                 'path' => $path,
-                'sort_order' => $index,
-                'is_cover' => $index === 0,
             ]);
         }
         return redirect()->route('home')->with('success', 'پست با موفقیت ایجاد شد.');
+    }
+    public function index(){
+        $posts = Post::with(['category', 'images', 'user'])->latest()->get();
+
+        return view('tools.index', compact('posts'));
     }
 }
