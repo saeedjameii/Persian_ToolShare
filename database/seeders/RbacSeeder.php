@@ -49,7 +49,6 @@ class RbacSeeder extends Seeder
         $admin->permissions()->sync(Permission::all());
 
         $creator->permissions()->sync(Permission::WhereIn('name', [
-            'create-post',
             'update-own-post',
             'delete-own-post',
             'create-category',
@@ -58,7 +57,6 @@ class RbacSeeder extends Seeder
         ])->get());
 
         $user->permissions()->sync(Permission::WhereIn('name', [
-            'create-post',
             'update-own-post',
             'delete-own-post',
         ])->get());
