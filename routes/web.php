@@ -3,12 +3,11 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserRoleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\JwtCookieMiddleware;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [PostController::class, 'home'])->name('home');
 
 Route::get('sign-up', [AuthController::class, 'signUp'])->name('signUp');
 Route::post('sign-up', [AuthController::class, 'signUpPost'])->name('signUp.post');
@@ -38,4 +37,7 @@ Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->
 Route::put('/categories/{category}', [CategoryController::class, 'update'])->middleware('permission:update-category')->name('categories.update');
 
 Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->middleware('permission:delete-category')->name('categories.destroy');
+
+Route::get('/users', [UserRoleController::class, 'index'])->middleware('permission:assign-role')->name('users.index');
+Route::put('/users/{user}/role', [UserRoleController::class, 'update'])->middleware('permission:assign-role')->name('users.role.update');
 

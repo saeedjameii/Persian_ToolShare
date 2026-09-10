@@ -36,15 +36,15 @@ class PostPolicy
      * Determine whether the user can update the model.
      */
 
-public function update(User $user, Post $post): bool
-{
-    if ($user->hasPermission('update-any-post')) {
-        return true;
-    }
+    public function update(User $user, Post $post): bool
+    {
+        if ($user->hasPermission('update-any-post')) {
+            return true;
+        }
 
-    return $user->hasPermission('update-own-post')
-        && $post->user_id === $user->id;
-}
+        return $user->hasPermission('update-own-post')
+            && $post->user_id === $user->id;
+    }
 
 
     /**
@@ -52,7 +52,12 @@ public function update(User $user, Post $post): bool
      */
     public function delete(User $user, Post $post): bool
     {
-        return false;
+        if($user->hasPermission('delete-any-post')){
+            return true;
+        }
+
+        return $user->hasPermission('delete-own-post')
+            && $post->user_id === $user->id;
     }
 
     /**

@@ -22,6 +22,9 @@
                 <a href="{{ route('home') }}">خانه</a>
                 <a href="{{ route('posts.index') }}">مشاهده ابزارها</a>
                 <a href="#how">نحوه کار</a>
+                @if (auth('api')->check() && auth('api')->user()->hasRole('admin'))
+                    <a href="{{ route('users.index') }}">مدیریت کاربران</a>
+                @endif
             </div>
 
         @endif

@@ -77,25 +77,36 @@
           <div class="kicker">ابزار های محبوب</div>
           <h2 class="section-title">ابزارهایی که افراد در حال به اشتراک گذاشتن هستند</h2>
         </div>
-        <a class="btn btn-secondary" href="#">مشاهده تمام ابزارها</a>
+        <a class="btn btn-secondary" href="{{ route('posts.index') }}">مشاهده تمام ابزارها</a>
       </div>
-      <div class="tools-grid">            
-     <article class="tool-card">
-        <img
-        class="tool-image"
-        src="{{ asset('/images/photo-1504148455328-c376907d081c.jpg') }}"
-        />
-        <div class="tool-body">
-        <span class="tag">ابزار های برقی</span>
-        <h3>دریل شارژی</h3>
-        <p>دریل جمع‌وجور و کاربردی برای تعمیرات منزل و پروژه‌ها</p>
-        <div class="card-bottom">
-            <span class="price">80,000 تومان / روز</span>
-            <a href="details.html">مشاهده ←</a>
-        </div>
-        </div>
+      <div class="tools-grid">    
+        @forelse ($latestPosts as $post)
+          <article class="tool-card">
+          @if ($post->images->isNotEmpty())
+            <img
+            class="tool-image"
+            src="{{ asset('storage/' . $post->images->first()->path) }}"
+            alt="{{ $post->title }}"
+            />
+          @else
+            <div class="tool-image"><p>تصویر موجود نیست</p></div>
+          @endif
+          <div class="tool-body">
+            @if ($post->category)
+              <span class="tag">{{ $post->category->name }}</span>
+            @endif
+            <h3>{{ $post->title }}</h3>
+            <p>{{ $post->description }}</p>
+            <div class="card-bottom">
+              <span class="price">{{ $post->first_day_price }} تومان / روز</span>
+              <a href="{{ route('posts.show', $post) }}">مشاهده ←</a>
+            </div>
+         </div>
     </article>
-          </div>
+        @empty
+          <p>هنوز هیچ ابزاری ثبت نشده است.</p>
+        @endforelse        
+        </div>
     </div>
   </section>
 </main>

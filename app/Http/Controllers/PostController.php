@@ -10,9 +10,13 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class PostController extends Controller
 {
+    public function home(){
+        $latestPosts = Post::with(['category', 'images', 'user'])->latest()->take(4)->get();
+        return view('home', compact('latestPosts'));
+    }
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::whereDoesntHave('children')->with('parent')->get();
         return view('tools.create', compact('categories'));
     }
 
@@ -76,7 +80,7 @@ class PostController extends Controller
 
         Gate::authorize('update', $post);
         
-        $categories = Category::all();
+        $categories = Category::WhereDoesntHave('children')->with('parent')->get();
 
         return view('tools.edit', compact('post', 'categories'));
     }
@@ -103,5 +107,16 @@ class PostController extends Controller
         $post->update($data);
 
         return redirect()->route('posts.show', $post)->with('success', 'پست با موفقیت ویرایش شد.');
+    }
+
+    public function destroy(Post $post){
+        Gate::authorize('delete', $post);
+
+        try{
+            $post->delete();
+            return redirect()->route('posts.index')->with('success', 'پست مورد نظر با موفقیت حذف شد.');
+        } catch(\Throwable $e){
+            return redirect()->back()->with('error', 'پست شما حذف نشد لطفا دوباره تلاش کنید');
+        }
     }
 }

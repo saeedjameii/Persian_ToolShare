@@ -16,15 +16,12 @@ class JwtCookieMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->cookie('token');
+        if (! auth()->check()) {
+            return redirect()->route('login')
+                ->withCookie(cookie()->forget('token'))
+                ->withErrors(['email' => 'لطفا ابتدا وارد حساب خود شوید.']);
+        }
 
-        try
-        {
-            JWTAuth::setToken($token)->authenticate();
-        }
-        catch(\Throwable $e){
-            return redirect()->route('login')->withCookie(cookie()->forget('token'))->withErrors(['email' => 'لطفا ابتدا وارد حساب خود شوید.']);
-        }
         return $next($request);
     }
 }

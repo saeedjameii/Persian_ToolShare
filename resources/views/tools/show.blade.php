@@ -127,6 +127,13 @@
                     @can('update', $post)
                         <a href="{{ route('posts.edit', $post) }}" class="btn btn-primary">ویرایش پست</a>
                     @endcan
+                    @can('delete', $post)
+                    <form action="{{ route('posts.destroy', $post->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn text-danger">حذف</button>
+                    </form>
+                    @endcan
                 </div>
 
             </div>
