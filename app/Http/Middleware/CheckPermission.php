@@ -14,7 +14,7 @@ class CheckPermission
      *
      * @param  Closure(Request): (Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $permission): Response
+    public function handle(Request $request, Closure $next, ...$permissions): Response
     {
         $token = $request->cookie('token');
 
@@ -29,9 +29,13 @@ class CheckPermission
             return redirect()->route('login')->withCookie(cookie()->forget('token'))->withErrors(['email' => 'لطفا ابتدا وارد حساب خود شوید.']);
         }
 
-        if(!$user->hasPermission($permission)){
-            abort(403);
+        foreach ($permissions as $permission) {
+            if ($user->hasPermission($permission)) {
+                return $next($request);
+            }
         }
+
+        abort(403);
 
         return $next($request);
     }

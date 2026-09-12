@@ -16,51 +16,32 @@ class RbacSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
+            'create-post',
             'update-own-post',
             'delete-own-post',
             'update-any-post',
             'delete-any-post',
+
             'create-category',
             'update-category',
             'delete-category',
-            'manage-users',
+
+            'create-role',
+            'update-role',
+            'delete-role',
             'assign-role',
+
+            'manage-users',
         ];
 
         foreach($permissions as $permission){
             Permission::firstOrCreate(['name' => $permission]);
         }
 
-        $admin = Role::firstOrCreate([
-            'name' => 'admin',
-            'description' => 'دسترسی کامل سییستم',
-        ]);
+        $creator = Role::firstOrCreate(['name' => 'creator']);
 
-        $creator = Role::firstOrCreate([
-            'name' => 'creator',
-            'description' => 'مدیریت دسته بندی‌ها',
-        ]);
 
-        $user = Role::firstOrCreate([
-            'name' => 'user',
-            'description' => 'کاربر عادی سیستم',
-        ]); 
-
-        $admin->permissions()->sync(Permission::all());
-
-        $creator->permissions()->sync(Permission::WhereIn('name', [
-            'update-own-post',
-            'delete-own-post',
-            'create-category',
-            'update-category',
-            'delete-category',
-        ])->get());
-
-        $user->permissions()->sync(Permission::WhereIn('name', [
-            'update-own-post',
-            'delete-own-post',
-        ])->get());
-        
+        $creator->permissions()->sync(Permission::all());
         
 
     }

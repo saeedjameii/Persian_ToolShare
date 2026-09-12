@@ -3,9 +3,11 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserRoleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\JwtCookieMiddleware;
+use App\Models\Role;
 
 Route::get('/', [PostController::class, 'home'])->name('home');
 
@@ -40,4 +42,13 @@ Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])-
 
 Route::get('/users', [UserRoleController::class, 'index'])->middleware('permission:assign-role')->name('users.index');
 Route::put('/users/{user}/role', [UserRoleController::class, 'update'])->middleware('permission:assign-role')->name('users.role.update');
+
+Route::get('/roles', [RoleController::class, 'index'])->middleware('permission:create-role,update-role')->name('roles.index');
+Route::get('/roles/create', [RoleController::class, 'create'])->middleware('permission:create-role')->name('roles.create');
+Route::post('/roles', [RoleController::class, 'store'])->middleware('permission:create-role')->name('roles.store');
+
+Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->middleware('permission:update-role')->name('roles.edit');
+Route::put('/roles/{role}', [RoleController::class, 'update'])->middleware('permission:update-role')->name('roles.update');
+
+Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->middleware('permission:delete-role')->name('roles.destroy');
 
