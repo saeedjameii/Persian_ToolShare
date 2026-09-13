@@ -24,6 +24,10 @@ class CheckPermission
 
         try{
             $user = JWTAuth::setToken($token)->authenticate();
+            if(!$user || $user->trashed()){
+                JWTAuth::invalidate($token);
+                return redirect()->route('login')->withCookie(cookie()->forget('token'))->withErrors('email', 'حساب کاربری شما حذف شده است');
+            }
         }
         catch(\Throwable $e){
             return redirect()->route('login')->withCookie(cookie()->forget('token'))->withErrors(['email' => 'لطفا ابتدا وارد حساب خود شوید.']);

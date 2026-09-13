@@ -70,7 +70,33 @@
                         <span>Creator</span>
                     @endif
                 </div>
-
+                @can('permission', 'manage-users')
+                    @if (!$user->hasRole('creator'))
+                        @if ($user->trashed())
+                            <form action="{{ route('users.restore', $user->id) }}"
+                                method="POST"
+                                style="display:inline;"
+                                onsubmit="return confirm('آیا می‌خواهید این کاربر را بازیابی کنید؟');">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="btn btn-secondary">
+                                    بازیابی کاربر
+                                </button>
+                            </form>
+                        @else
+                            <form action="{{ route('users.destroy', $user) }}"
+                                method="POST"
+                                style="display:inline;"
+                                onsubmit="return confirm('آیا از حذف این کاربر مطمئن هستید؟');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">
+                                    حذف کاربر
+                                </button>
+                            </form>
+                        @endif
+                    @endif
+                @endcan
             @empty
 
                 <p style="color:var(--muted); text-align:center; padding:30px 0;">هیچ کاربری ثبت‌نام نکرده است.</p>

@@ -31,12 +31,12 @@
         <section class="intro" style="max-width:100%;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;">
             <div>
                 <h1 class="display-font" style="font-size:clamp(2rem, 3.4vw, 3rem); margin:8px 0 0;">دسته‌بندی‌ها</h1>
-                <p class="intro-copy">مدیریت دسته‌بندی‌ها</p>
-            </div>
-
-            <a href="{{ route('categories.create') }}" class="button button-primary">
-                + ساخت دسته‌بندی جدید
-            </a>
+           </div>
+            @can('permission', 'create-category')
+                <a href="{{ route('categories.create') }}" class="button button-primary">
+                    + ساخت دسته‌بندی جدید
+                </a>
+            @endcan
         </section>
 
 

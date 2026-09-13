@@ -15,9 +15,17 @@ class AuthenticateJwtCookie
 
         if ($token) {
             try {
-                JWTAuth::setToken($token)->authenticate();
+                $user = JWTAuth::setToken($token)->authenticate();
+                if($user){
+                    auth()->setUser($user);
+                }
+                if($user && $user->trashed()){
+                    JWTAuth::invalidate($token);
+                    return redirect()->route('login')->withCookie(cookie()->forget('token'))->withErrors([
+                        'email' => 'حساب کاربری شما حذف شده است']);
+                }
             } catch (\Throwable $e) {
-                // توکن نامعتبر/منقضی: صرفاً کاربر را ناشناس در نظر می‌گیریم
+
             }
         }
 

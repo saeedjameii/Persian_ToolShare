@@ -73,6 +73,14 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
+        $user = User::where('email', $request->email)->first();
+
+        if(!$user || $user->trashed()){
+            return redirect()->back()->withInput()->withErrors([
+                'email' => 'ایمیل یا رمزعبور اشتباه می‌باشد'
+            ]);
+        }
+
 
         $credentials = $request->only('email', 'password');
 

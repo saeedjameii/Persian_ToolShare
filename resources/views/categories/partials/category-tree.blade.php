@@ -3,12 +3,16 @@
     <div class="category-node-name">
         <span> {{ $category->name }} </span>
         <div class="category-actions">
-            <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-secondary">ویرایش</a>
-            <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn text-danger">حذف</button>
-            </form>
+            @can('permission', 'update-category')
+                <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-secondary">ویرایش</a>
+            @endcan
+            @can('permission', 'delete-category')
+                <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn text-danger">حذف</button>
+                </form>
+            @endcan
         </div>
     </div>
 
