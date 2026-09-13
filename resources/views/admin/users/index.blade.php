@@ -47,16 +47,18 @@
                             <span class="tag">{{ $role->name }}</span>
                         @endforeach
                     </div>
-
+                    @if(!$user->hasRole('creator'))
                     <form action="{{ route('users.role.update', $user) }}" method="POST" style="display:flex; align-items:center; gap:8px;">
                         @csrf
                         @method('PUT')
 
-                        <select class="form-control" name="role_id" style="width:auto;">
+                        <select class="form-control" name="role_ids[]" multiple style="width:auto; min-width:180px;">
                             @foreach ($roles as $role)
-                                <option value="{{ $role->id }}" {{ $user->roles->contains($role->id) ? 'selected' : '' }}>
-                                    {{ $role->name }}
-                                </option>
+                                @if ($role->name !== 'creator')                                   
+                                    <option value="{{ $role->id }}" {{ $user->roles->contains($role->id) ? 'selected' : '' }}>
+                                        {{ $role->name }}
+                                    </option>
+                                @endif
                             @endforeach
                         </select>
 
@@ -64,7 +66,9 @@
                             ذخیره
                         </button>
                     </form>
-
+                    @else
+                        <span>Creator</span>
+                    @endif
                 </div>
 
             @empty

@@ -16,11 +16,23 @@ class UserRoleController extends Controller
     }
 
     public function update(Request $request, User $user){
-        $request->validate([
-            'role_id' => 'required|exists:roles,id'
+
+        $data = $request->validate([
+            'role_ids' => 'required|array',
+            'role_ids.*' => 'exists:roles,id'
         ]);
 
-        $user->roles()->sync([$request->role_id]);
+        $creatorRole = Role::where('name', 'creator')->first();
+
+        if($user->hasRole('creator')){
+            abort(403, 'نقش creator قابل تغییر نمی‌باشد');
+        }
+
+        if($creatorRole && in_array($creatorRole->id, $data['role_ids'])){
+            abort(403, 'نقش creator قابل تخصیص نمی‌باشد');
+        }
+
+        $user->roles()->sync($data['role_ids']);
         return back()->with('success', 'نقش کاربر با موفقیت بروزرسانی شد');
     }
 }
