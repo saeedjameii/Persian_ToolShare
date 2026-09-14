@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserRoleController;
@@ -10,6 +11,8 @@ use App\Http\Middleware\JwtCookieMiddleware;
 use App\Models\Role;
 
 Route::get('/', [PostController::class, 'home'])->name('home');
+
+Route::get('/panel', [DashboardController::class, 'index'])->middleware(JwtCookieMiddleware::class)->name('panel');
 
 Route::get('sign-up', [AuthController::class, 'signUp'])->name('signUp');
 Route::post('sign-up', [AuthController::class, 'signUpPost'])->name('signUp.post');
@@ -21,6 +24,7 @@ Route::get('/create', [PostController::class, 'create'])->middleware('permission
 Route::post('/create', [PostController::class, 'createPost'])->middleware('permission:create-post')->name('create_post.post');
 
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+Route::get('/my-posts', [PostController::class, 'myPosts'])->middleware(JwtCookieMiddleware::class)->name('posts.mine');
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
 
 Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
@@ -53,4 +57,3 @@ Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->middleware('p
 Route::put('/roles/{role}', [RoleController::class, 'update'])->middleware('permission:update-role')->name('roles.update');
 
 Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->middleware('permission:delete-role')->name('roles.destroy');
-

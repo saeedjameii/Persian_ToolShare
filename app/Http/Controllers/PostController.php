@@ -69,6 +69,11 @@ class PostController extends Controller
         return view('tools.index', compact('posts'));
     }
 
+    public function myPosts(){
+        $posts = auth('api')->user()->posts()->with(['category', 'images'])->latest()->get();
+        return view('tools.my-posts', compact('posts'));
+    }
+
     public function show(Post $post){
         $post->load(['category', 'images', 'user']);
 

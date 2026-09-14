@@ -21,10 +21,10 @@
             <div class="nav-links">
                 <a href="{{ route('home') }}">خانه</a>
                 <a href="{{ route('posts.index') }}">مشاهده ابزارها</a>
-                <a href="#how">نحوه کار</a>
-                @if (auth('api')->check() && auth('api')->user()->hasPermission('assign-role'))
-                    <a href="{{ route('users.index') }}">مدیریت کاربران</a>
+                @if (auth('api')->check())
+                    <a href="{{ route('panel') }}">پنل من</a>
                 @endif
+                <a href="#how">نحوه کار</a>
             </div>
 
         @endif
