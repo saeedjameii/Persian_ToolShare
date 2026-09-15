@@ -6,9 +6,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserRoleController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\JwtCookieMiddleware;
-use App\Models\Role;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PostController::class, 'home'])->name('home');
 
@@ -18,7 +17,9 @@ Route::get('sign-up', [AuthController::class, 'signUp'])->name('signUp');
 Route::post('sign-up', [AuthController::class, 'signUpPost'])->name('signUp.post');
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post'); 
+Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/create', [PostController::class, 'create'])->middleware('permission:create-post')->name('create_post');
 Route::post('/create', [PostController::class, 'createPost'])->middleware('permission:create-post')->name('create_post.post');

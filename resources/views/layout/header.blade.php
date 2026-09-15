@@ -16,7 +16,6 @@
             ToolShare
         </a>
 
-
         <div class="nav-links">
             <a href="{{ route('home') }}">خانه</a>
             <a href="{{ route('posts.index') }}">مشاهده ابزارها</a>
@@ -24,26 +23,24 @@
             @yield('page-actions')
         </div>
 
-
         <div class="nav-actions">
-            
-
-
-
+        @hasSection('header-actions')
+            @yield('header-actions')
+        @else
             @if (auth('api')->check())
-
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button class="btn btn-secondary" type="submit">خروج</button>
+                </form>
                 <a class="btn btn-secondary" href="{{ route('panel') }}">پنل من</a>
-
                 <p>
                     👤 {{ auth('api')->user()->first_name }}
                 </p>
-
             @else
-
                 <a class="btn btn-secondary" href="{{ route('login') }}">ورود</a>
                 <a class="btn btn-primary" href="{{ route('signUp') }}">ثبت‌ نام</a>
             @endif
-
+        @endif
         </div>
     </nav>
 </header>

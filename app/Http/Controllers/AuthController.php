@@ -8,14 +8,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Morilog\Jalali\Jalalian;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    public function signUp(){
+    public function signUp()
+    {
         return view('auth.signUp');
     }
 
-    public function signUpPost(Request $request){
+    public function signUpPost(Request $request)
+    {
 
         $request->validate([
             'first_name' => 'required|max:20',
@@ -24,10 +27,10 @@ class AuthController extends Controller
             'phone_number' => 'required|size:11|regex:/^09[0-9]{9}$/|unique:users',
             'birth_date' => 'required|regex:/^[0-9]{4}\/[0-9]{2}\/[0-9]{2}$/',
             'national_code' => 'required|size:10|regex:/^[0-9]{10}$/|unique:users',
-            'password' => 'required|min:8|confirmed' 
+            'password' => 'required|min:8|confirmed',
         ]);
 
-        try{
+        try {
             $jalaliDate = Jalalian::fromFormat('Y/m/d', $request->birth_date);
 
             if ($jalaliDate->format('Y/m/d') !== $request->birth_date) {
@@ -55,19 +58,21 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->back()->with('error', 'ثبت نام با مشکل مواجه شد. لطفاً دوباره تلاش کنید.');
         }
 
         return redirect()->route('home')->with('success', 'ثبت نام موفقیت‌آمیز بود. لطفاً وارد شوید.');
     }
 
-    public function login(){
+    public function login()
+    {
         return view('auth.login');
     }
 
-    public function loginPost(Request $request){
-    
+    public function loginPost(Request $request)
+    {
+
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -75,19 +80,35 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if(!$user || $user->trashed()){
+        if (! $user || $user->trashed()) {
             return redirect()->back()->withInput()->withErrors([
-                'email' => 'ایمیل یا رمزعبور اشتباه می‌باشد'
+                'email' => 'ایمیل یا رمزعبور اشتباه می‌باشد',
             ]);
         }
 
-
         $credentials = $request->only('email', 'password');
 
-        if (!$token = auth('api')->attempt($credentials)) {
+        if (! $token = auth('api')->attempt($credentials)) {
             return redirect()->back()->withInput()->withErrors(['email' => 'ایمیل یا رمز عبور اشتباه است.']);
         }
 
         return redirect()->route('home')->withCookie(cookie('token', $token, 60))->with('success', 'ورود موفقیت‌آمیز بود.');
+    }
+
+    public function logout(Request $request)
+    {
+        $token = $request->cookie('token');
+
+        if ($token) {
+            try {
+                JWTAuth::setToken($token)->invalidate();
+            } catch (\Throwable $e) {
+
+            }
+        }
+
+        auth('api')->logout();
+
+        return redirect()->route('home')->withCookie(cookie()->forget('token'))->with('success', 'با موفقیت خارج شدید.');
     }
 }
