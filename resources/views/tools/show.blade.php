@@ -87,13 +87,25 @@
                     <div class="spec-row">
                         <strong>قابل استفاده از:</strong>
 
-                        <span>{{ $post->available_from }}</span>
+                        <span>
+                            @if ($post->available_from)
+                                {{ \Morilog\Jalali\CalendarUtils::convertNumbers(\Morilog\Jalali\Jalalian::fromCarbon(\Carbon\Carbon::parse($post->available_from))->format('Y/m/d')) }}
+                            @else
+                                —
+                            @endif
+                        </span>
                     </div>
 
                     <div class="spec-row">
                         <strong>قابل استفاده تا:</strong>
 
-                        <span>{{ $post->available_untill }}</span>
+                        <span>
+                            @if ($post->available_untill)
+                                {{ \Morilog\Jalali\CalendarUtils::convertNumbers(\Morilog\Jalali\Jalalian::fromCarbon(\Carbon\Carbon::parse($post->available_untill))->format('Y/m/d')) }}
+                            @else
+                                —
+                            @endif
+                        </span>
                     </div>
 
                 </div>

@@ -465,3 +465,144 @@ if (editFirstDayPrice) {
   initializeEditTomanInput("edit-first-day-price");
   initializeEditTomanInput("edit-extra-day-price");
 }
+
+const editStartDate = document.getElementById("edit-available-start");
+if (editStartDate) {
+  const editEndDate = document.getElementById("edit-available-end");
+  const editStartDateValue = document.getElementById("edit-available-start-value");
+  const editEndDateValue = document.getElementById("edit-available-end-value");
+  const editCalendar = document.getElementById("edit-jalali-calendar");
+  const editMonths = ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"];
+  const editWeekdays = ["ش", "ی", "د", "س", "چ", "پ", "ج"];
+  const editNumberFormatter = new Intl.NumberFormat("fa-IR");
+  let activeEditDateInput;
+  let activeEditDateValueInput;
+  let editCalendarYear;
+  let editCalendarMonth;
+
+  function editJalaliToGregorian(year, month, day) {
+    let jy = year + 1595;
+    let days = -355668 + (365 * jy) + (Math.floor(jy / 33) * 8)
+      + Math.floor(((jy % 33) + 3) / 4) + day + (month < 7 ? (month - 1) * 31 : ((month - 7) * 30) + 186);
+    let gy = 400 * Math.floor(days / 146097);
+    days %= 146097;
+    if (days > 36524) {
+      gy += 100 * Math.floor(--days / 36524);
+      days %= 36524;
+      if (days >= 365) days++;
+    }
+    gy += 4 * Math.floor(days / 1461);
+    days %= 1461;
+    if (days > 365) {
+      gy += Math.floor((days - 1) / 365);
+      days = (days - 1) % 365;
+    }
+    const monthDays = [31, (gy % 4 === 0 && (gy % 100 !== 0 || gy % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    let gm = 0;
+    while (days >= monthDays[gm]) days -= monthDays[gm++];
+    return `${gy}-${String(gm + 1).padStart(2, "0")}-${String(days + 1).padStart(2, "0")}`;
+  }
+
+  function formatEditJalaliDate(gregorianDate) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(gregorianDate)) return "";
+    const parts = new Intl.DateTimeFormat("en-US-u-ca-persian-nu-latn", {
+      year: "numeric", month: "2-digit", day: "2-digit", timeZone: "UTC"
+    }).formatToParts(new Date(`${gregorianDate}T00:00:00Z`));
+    const part = type => parts.find(item => item.type === type).value;
+    return `${part("year")}/${part("month")}/${part("day")}`;
+  }
+
+  function editLocalGregorianDate() {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  }
+
+  function editMonthLength(year, month) {
+    if (month <= 6) return 31;
+    if (month <= 11) return 30;
+    return formatEditJalaliDate(editJalaliToGregorian(year, 12, 30)) === `${year}/12/30` ? 30 : 29;
+  }
+
+  function renderEditCalendar() {
+    const firstDay = new Date(`${editJalaliToGregorian(editCalendarYear, editCalendarMonth, 1)}T00:00:00Z`).getUTCDay();
+    const offset = (firstDay + 1) % 7;
+    const blanks = Array.from({ length: offset }, () => "<span></span>").join("");
+    const days = Array.from({ length: editMonthLength(editCalendarYear, editCalendarMonth) }, (_, index) => {
+      const day = index + 1;
+      const gregorian = editJalaliToGregorian(editCalendarYear, editCalendarMonth, day);
+      const selected = gregorian === activeEditDateValueInput.value ? " is-selected" : "";
+      return `<button class="jalali-calendar-day${selected}" type="button" data-edit-jalali-day="${day}">${editNumberFormatter.format(day)}</button>`;
+    }).join("");
+    editCalendar.innerHTML = `
+      <div class="jalali-calendar-header">
+        <button class="jalali-calendar-nav" type="button" data-edit-calendar-nav="next" aria-label="ماه بعد">›</button>
+        <div class="jalali-calendar-selects">
+          <select class="jalali-calendar-select" data-edit-calendar-month aria-label="انتخاب ماه">${editMonths.map((month, index) => `<option value="${index + 1}" ${editCalendarMonth === index + 1 ? "selected" : ""}>${month}</option>`).join("")}</select>
+          <select class="jalali-calendar-select" data-edit-calendar-year aria-label="انتخاب سال">${Array.from({ length: 151 }, (_, index) => 1300 + index).map(year => `<option value="${year}" ${editCalendarYear === year ? "selected" : ""}>${editNumberFormatter.format(year)}</option>`).join("")}</select>
+        </div>
+        <button class="jalali-calendar-nav" type="button" data-edit-calendar-nav="previous" aria-label="ماه قبل">‹</button>
+      </div>
+      <div class="jalali-calendar-weekdays">${editWeekdays.map(day => `<span>${day}</span>`).join("")}</div>
+      <div class="jalali-calendar-days">${blanks}${days}</div>`;
+  }
+
+  function closeEditCalendar() {
+    editCalendar.hidden = true;
+    if (activeEditDateInput) activeEditDateInput.setAttribute("aria-expanded", "false");
+  }
+
+  function openEditCalendar(input, valueInput) {
+    if (!editCalendar.hidden && activeEditDateInput === input) {
+      closeEditCalendar();
+      return;
+    }
+    activeEditDateInput = input;
+    activeEditDateValueInput = valueInput;
+    [editCalendarYear, editCalendarMonth] = formatEditJalaliDate(valueInput.value || editLocalGregorianDate()).split("/").map(Number);
+    renderEditCalendar();
+    editCalendar.hidden = false;
+    input.setAttribute("aria-expanded", "true");
+  }
+
+  editCalendar.addEventListener("click", event => {
+    const nav = event.target.closest("[data-edit-calendar-nav]");
+    if (nav) {
+      event.preventDefault();
+      editCalendarMonth += nav.dataset.editCalendarNav === "next" ? 1 : -1;
+      if (editCalendarMonth === 13) { editCalendarMonth = 1; editCalendarYear++; }
+      if (editCalendarMonth === 0) { editCalendarMonth = 12; editCalendarYear--; }
+      renderEditCalendar();
+      return;
+    }
+    const day = event.target.closest("[data-edit-jalali-day]");
+    if (day) {
+      const selected = `${editCalendarYear}/${String(editCalendarMonth).padStart(2, "0")}/${String(day.dataset.editJalaliDay).padStart(2, "0")}`;
+      activeEditDateValueInput.value = editJalaliToGregorian(editCalendarYear, editCalendarMonth, Number(day.dataset.editJalaliDay));
+      activeEditDateInput.value = selected.replace(/\d/g, digit => "۰۱۲۳۴۵۶۷۸۹"[digit]);
+      closeEditCalendar();
+    }
+  });
+
+  editCalendar.addEventListener("change", event => {
+    if (event.target.matches("[data-edit-calendar-month]")) editCalendarMonth = Number(event.target.value);
+    if (event.target.matches("[data-edit-calendar-year]")) editCalendarYear = Number(event.target.value);
+    renderEditCalendar();
+  });
+
+  [editStartDate, editEndDate].forEach((input, index) => {
+    const valueInput = index === 0 ? editStartDateValue : editEndDateValue;
+    input.value = formatEditJalaliDate(valueInput.value).replace(/\d/g, digit => "۰۱۲۳۴۵۶۷۸۹"[digit]);
+    input.addEventListener("click", () => openEditCalendar(input, valueInput));
+  });
+
+  document.querySelectorAll("[data-edit-date-picker-for]").forEach(button => {
+    button.addEventListener("click", () => {
+      const input = document.getElementById(button.dataset.editDatePickerFor);
+      openEditCalendar(input, document.getElementById(`${button.dataset.editDatePickerFor}-value`));
+    });
+  });
+
+  document.addEventListener("click", event => {
+    if (!editCalendar.hidden && !event.target.closest(".jalali-date-wrap") && !event.target.closest("#edit-jalali-calendar")) closeEditCalendar();
+  });
+}

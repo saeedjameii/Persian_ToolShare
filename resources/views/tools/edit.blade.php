@@ -137,27 +137,37 @@
                     <div class="field">
                         <label>قابل استفاده از</label>
 
-                        <input
-                            class="form-control"
-                            type="date"
-                            name="available_from"
-                            value="{{ old('available_from', $post->available_from) }}"
-                        >
+                        <div class="jalali-date-wrap"><input
+                            class="form-control jalali-date-input"
+                            id="edit-available-start"
+                            type="text"
+                            placeholder="۱۴۰۵/۰۶/۲۴"
+                            readonly
+                            aria-haspopup="dialog"
+                            aria-expanded="false"
+                        ><button class="jalali-calendar-button" type="button" aria-label="انتخاب تاریخ شروع" data-edit-date-picker-for="edit-available-start">📅</button></div>
+                        <input id="edit-available-start-value" type="hidden" name="available_from" value="{{ old('available_from', $post->available_from) }}">
                     </div>
 
 
                     <div class="field">
                         <label>قابل استفاده تا</label>
 
-                        <input
-                            class="form-control"
-                            type="date"
-                            name="available_untill"
-                            value="{{ old('available_untill', $post->available_untill) }}"
-                        >
+                        <div class="jalali-date-wrap"><input
+                            class="form-control jalali-date-input"
+                            id="edit-available-end"
+                            type="text"
+                            placeholder="۱۴۰۵/۰۶/۲۴"
+                            readonly
+                            aria-haspopup="dialog"
+                            aria-expanded="false"
+                        ><button class="jalali-calendar-button" type="button" aria-label="انتخاب تاریخ پایان" data-edit-date-picker-for="edit-available-end">📅</button></div>
+                        <input id="edit-available-end-value" type="hidden" name="available_untill" value="{{ old('available_untill', $post->available_untill) }}">
                     </div>
 
                 </div>
+
+                <div id="edit-jalali-calendar" class="jalali-calendar" role="dialog" aria-label="تقویم شمسی" hidden></div>
 
                 <div style="display:flex; align-items:center; gap:14px; margin-top:8px;">
                     <button type="submit" class="button button-primary">

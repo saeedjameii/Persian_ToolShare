@@ -63,10 +63,26 @@ class PostController extends Controller
         }
         return redirect()->route('home')->with('success', 'پست با موفقیت ایجاد شد.');
     }
-    public function index(){
-        $posts = Post::with(['category', 'images', 'user'])->latest()->get();
+    public function index(Request $request){
+        
+        $query = Post::with(['category', 'images', 'user'])->latest();
 
-        return view('tools.index', compact('posts'));
+        if($request->filled('search')){
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+        if($request->filled('category_id')){
+            $query->where('category_id', $request->category_id);
+        }
+
+        $posts = $query->paginate(9)->withQueryString();
+
+        $categories = Category::whereDoesntHave('children')->get();
+
+        return view('tools.index', compact('posts', 'categories'));
     }
 
     public function myPosts(){

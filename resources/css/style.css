@@ -899,3 +899,38 @@ a:focus-visible { outline: 3px solid rgba(41, 93, 67, 0.22); outline-offset: 2px
 .users-empty { padding: 55px 25px; color: var(--muted); text-align: center; }.users-empty span { display: block; font-size: 2rem; }.users-empty p { margin: 10px 0 0; }.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
 @media (max-width: 920px) { .user-row { align-items: flex-start; flex-direction: column; }.user-actions { width: 100%; flex-wrap: wrap; } }
 @media (max-width: 640px) { .users-summary { grid-template-columns: 1fr; gap: 9px; }.users-card-heading, .user-row { padding: 19px; }.users-card-heading { align-items: flex-start; flex-direction: column; }.user-actions, .role-form { align-items: stretch; flex-direction: column; }.role-form, .role-select, .user-actions > form { width: 100%; }.role-form .button, .user-actions > form > .button { width: 100%; } }
+
+.pagination-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 36px 0;
+}
+.page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 10px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 14px;
+  text-decoration: none;
+  background: var(--cream);
+}
+.page-link:hover {
+  border-color: var(--forest);
+}
+.page-link-active {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: #fff;
+  font-weight: 700;
+}
+.page-link-disabled {
+  color: #b7c0b3;
+  cursor: default;
+}

@@ -10,15 +10,17 @@
             ابزارهای مفید را از افراد جامعه خود پیدا کنید و دقیقاً همان چیزی را
             که نیاز دارید، امانت بگیرید.
           </p>
-          <form class="search-box">
+          <form class="search-box" method="GET" action="{{ route('posts.index') }}">
             <input
               class="search"
               type="search"
+              name="search"
+              value="{{ request('search') }}"
               placeholder="جستجو برای ابزارها..."/>
-            <select class="select">
-              <option>همه دسته‌بندی‌ها</option>
-                @foreach($posts->pluck('category')->unique('id') as $category)
-                <option value="{{ $category->id }}">{{ $category->name }}</option>
+            <select class="select" name="category_id" onchange="this.form.submit()">
+              <option value="">همه دسته‌بندی‌ها</option>
+                @foreach($categories as $category)
+                <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                 @endforeach
             </select>
             <select class="select">
@@ -65,6 +67,10 @@
         @empty
             <p>هیچ ابزاری برای نمایش وجود ندارد.</p>
         @endforelse
+        </div>
+
+        <div class="container">
+            {{ $posts->links('pagination.custom') }}
         </div>
       </section>
     </main>
