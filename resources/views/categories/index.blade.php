@@ -2,15 +2,6 @@
 
 @section('title', 'Categories — ToolShare')
 
-
-@section('nav-links')
-<p></p>
-@endsection
-
-@section('header-actions')
-    <a class="browse-link" href="{{ route('home') }}">← بازگشت به صفحه اصلی</a>
-@endsection
-
 @section('content')
 
 <main class="page-area">

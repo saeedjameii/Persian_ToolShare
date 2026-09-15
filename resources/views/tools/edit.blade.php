@@ -1,5 +1,9 @@
 @extends('layout.master')
 
+@section('header-actions')
+    <a class="browse-link" href="{{ route('posts.show', $post) }}">← بازگشت به صفحه قبل</a>
+@endsection
+
 @section('content')
 
 <main class="page-area">

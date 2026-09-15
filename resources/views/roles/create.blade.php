@@ -1,5 +1,11 @@
 @extends('layout.master')
 
+@section('title', 'Create Roles - ToolShare')
+
+@section('header-actions')
+    <a class="browse-link" href="{{ route('roles.index') }}">← بازگشت به صفحه قبل</a>
+@endsection
+
 @section('content')
 
 <main class="page-area">

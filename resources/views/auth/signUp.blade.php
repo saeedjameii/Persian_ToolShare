@@ -2,11 +2,6 @@
 
 @section('title', 'Sign Up — ToolShare')
 
-
-@section('nav-links')
-<p></p>
-@endsection
-
 @section('header-actions')
     <a class="btn btn-secondary" href="{{ route('home') }}">خانه</a>
     <a class="btn btn-primary" href="{{ route('login') }}">ورود</a>

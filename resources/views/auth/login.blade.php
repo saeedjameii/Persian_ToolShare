@@ -1,11 +1,6 @@
 @extends('layout.master')
 @section('title', 'Login — ToolShare')
 
-
-@section('nav-links')
-<p></p>
-@endsection
-
 @section('header-actions')
     <a class="btn btn-secondary" href="{{ route('home') }}">خانه</a>
     <a class="btn btn-primary" href="{{ route('signUp') }}">ثبت نام</a>

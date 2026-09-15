@@ -2,10 +2,6 @@
 
 @section('title', 'Edit Category ToolShare')
 
-@section('nav-links')
-<p></p>
-@endsection
-
 @section('header-actions')
     <a class="browse-link" href="{{ route('categories.index') }}">← بازگشت به صفحه قبل</a>
 @endsection

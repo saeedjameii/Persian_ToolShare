@@ -1,5 +1,9 @@
 @extends('layout.master')
 
+@section('header-actions')
+    <a class="browse-link" href="{{ route('panel') }}">← بازگشت به صفحه قبل</a>
+@endsection
+
 @section('content')
 
 <main class="page-area">
@@ -76,11 +80,7 @@
                                     @csrf
                                     @method('DELETE')
 
-                                    <button
-                                        type="submit"
-                                        class="btn text-danger"
-                                        style="border:1px solid var(--line); background:none;"
-                                    >
+                                    <button type="submit" class="btn text-danger" style="border:1px solid var(--line); background:none;">
                                         حذف
                                     </button>
 

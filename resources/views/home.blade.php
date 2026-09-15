@@ -28,7 +28,7 @@
         </p>
         <div class="hero-buttons">
           <a class="btn btn-primary" href="{{ route('posts.index') }}">مشاهده ابزار ها</a>
-          <a class="btn btn-secondary" href="{{ route('create_post') }}">ثبت ابزار</a>
+          @can('permission', 'create-post')<a class="btn btn-secondary" href="{{ route('create_post') }}">ثبت ابزار</a>@endcan
         </div>
       </div>
       <div class="hero-image">
