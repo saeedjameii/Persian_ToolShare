@@ -75,8 +75,8 @@
 
                     <div class="field">
                         <label for="condition">شرایط ابزار</label>
-                        <select class="form-control" id="condition" name="condition" value="{{ old('condition') }}">
-                            <option value="">شرایط ابزار را انتخاب کنید</option>
+                        <select class="form-control" id="condition" name="condition" >
+                            <option value="{{ old('condition', $post->condition) }}">شرایط ابزار را انتخاب کنید</option>
                             <option>جدید</option>
                             <option>تقریباً جدید</option>
                             <option>خوب</option>
@@ -101,14 +101,17 @@
                     <div class="field">
                         <label>قیمت روز اول</label>
 
-                        <div class="currency-wrap">
+                        <div class="currency-wrap toman-wrap">
+                            <span class="currency-symbol">تومان</span>
                             <input
-                                class="form-control"
-                                type="number"
-                                step="0.01"
-                                name="first_day_price"
-                                value="{{ old('first_day_price', $post->first_day_price) }}"
+                                class="form-control toman-input"
+                                id="edit-first-day-price"
+                                type="text"
+                                inputmode="numeric"
+                                autocomplete="off"
+                                placeholder="مثلاً ۱۰۰٬۰۰۰"
                             >
+                            <input id="edit-first-day-price-value" type="hidden" name="first_day_price" value="{{ old('first_day_price', $post->first_day_price) }}">
                         </div>
                     </div>
 
@@ -116,14 +119,17 @@
                     <div class="field">
                         <label>قیمت هر روز اضافه</label>
 
-                        <div class="currency-wrap">
+                        <div class="currency-wrap toman-wrap">
+                            <span class="currency-symbol">تومان</span>
                             <input
-                                class="form-control"
-                                type="number"
-                                step="0.01"
-                                name="extra_day_price"
-                                value="{{ old('extra_day_price', $post->extra_day_price) }}"
+                                class="form-control toman-input"
+                                id="edit-extra-day-price"
+                                type="text"
+                                inputmode="numeric"
+                                autocomplete="off"
+                                placeholder="مثلاً ۵۰٬۰۰۰"
                             >
+                            <input id="edit-extra-day-price-value" type="hidden" name="extra_day_price" value="{{ old('extra_day_price', $post->extra_day_price) }}">
                         </div>
                     </div>
 

@@ -41,8 +41,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="birth_date">تاریخ تولد</label><input class="input" id="birth_date" name="birth_date"
-                     type="text" value="{{ old('birth_date') }}" placeholder="1405/06/12" required/>
+                    <label for="birth-date-display">تاریخ تولد</label><div class="jalali-date-wrap"><input class="input jalali-date-input"
+                     id="birth-date-display" type="text" value="" placeholder="۱۴۰۵/۰۶/۱۲" readonly required aria-haspopup="dialog" aria-expanded="false"/><button
+                     class="jalali-calendar-button" type="button" aria-label="انتخاب تاریخ تولد" data-signup-date-picker>📅</button></div><input
+                     id="birth_date" name="birth_date" type="hidden" value="{{ old('birth_date') }}"/>
+                    <div id="signup-jalali-calendar" class="jalali-calendar" role="dialog" aria-label="تقویم شمسی تاریخ تولد" hidden></div>
                     <div>
                         @error('birth_date')
                             <p class="text-danger">{{ $message }}</p>

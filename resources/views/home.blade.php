@@ -92,7 +92,7 @@
             <h3>{{ $post->title }}</h3>
             <p>{{ $post->description }}</p>
             <div class="card-bottom">
-              <span class="price">{{ $post->first_day_price }} تومان / روز</span>
+              <span class="price">{{ \Illuminate\Support\Number::format($post->first_day_price, 0, null, 'fa') }} تومان / روز</span>
               <a href="{{ route('posts.show', $post) }}">مشاهده ←</a>
             </div>
          </div>

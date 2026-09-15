@@ -100,12 +100,12 @@
 
                 <div class="price-box">
                     <div class="detail-price">
-                        {{ $post->first_day_price }} تومان
+                        {{ \Illuminate\Support\Number::format($post->first_day_price, 0, null, 'fa') }} تومان
                         <span style="font-size:14px; font-weight:400; color:var(--muted);">/ روز اول</span>
                     </div>
 
                     <div style="margin-top:6px; color:var(--muted);">
-                        {{ $post->extra_day_price }} تومان به‌ازای هر روز اضافه
+                        {{ \Illuminate\Support\Number::format($post->extra_day_price, 0, null, 'fa') }} تومان به‌ازای هر روز اضافه
                     </div>
                 </div>
 

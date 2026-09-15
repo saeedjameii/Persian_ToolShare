@@ -97,24 +97,37 @@
                         <div class="field-grid">
 
                             <div class="field"><label for="first-day-price">قیمت روز اول</label>
-                                <div class="currency-wrap"><span class="currency-symbol">$</span><input class="form-control"
-                                        id="first-day-price" name="first_day_price" type="number" value="{{ old('first-day-price') }}" min="0"
-                                        step="0.01" placeholder="0"></div><span class="validation-message"
+                                <div class="currency-wrap toman-wrap"><span class="currency-symbol">تومان</span><input class="form-control toman-input"
+                                        id="first-day-price" type="text" inputmode="numeric" autocomplete="off" value=""
+                                        placeholder="مثلاً ۱۰۰٬۰۰۰" aria-describedby="first-day-price-hint"><input
+                                        id="first-day-price-value" name="first_day_price" type="hidden" value="{{ old('first_day_price') }}"></div><span
+                                    id="first-day-price-hint" class="field-hint">مبلغ را به تومان وارد کنید.</span><span class="validation-message"
                                     id="first-day-error"></span>
                             </div>
                             <div class="field"><label for="extra-day-price">قیمت هر روز اضافی</label>
-                                <div class="currency-wrap"><span class="currency-symbol">$</span><input class="form-control"
-                                        id="extra-day-price" name="extra_day_price" type="number" value="{{ old('extra-day-price') }}" min="0"
-                                        step="0.01" placeholder="0"></div><span class="validation-message"
+                                <div class="currency-wrap toman-wrap"><span class="currency-symbol">تومان</span><input class="form-control toman-input"
+                                        id="extra-day-price" type="text" inputmode="numeric" autocomplete="off" value=""
+                                        placeholder="مثلاً ۵۰٬۰۰۰" aria-describedby="extra-day-price-hint"><input
+                                        id="extra-day-price-value" name="extra_day_price" type="hidden" value="{{ old('extra_day_price') }}"></div><span
+                                    id="extra-day-price-hint" class="field-hint">مبلغ را به تومان وارد کنید.</span><span class="validation-message"
                                     id="extra-day-error"></span>
                             </div>
-                            <div class="field"><label for="available-start">در دسترس از</label><input
-                                    class="form-control" id="available-start" name="available_from" type="date" value="{{ old('available_from') }}">
+                            <div class="field"><label for="available-start">در دسترس از</label><div class="jalali-date-wrap"><input
+                                    class="form-control jalali-date-input" id="available-start" type="text" readonly
+                                    placeholder="۱۴۰۵/۰۶/۲۴" aria-describedby="available-start-hint" aria-haspopup="dialog" aria-expanded="false"><button
+                                    class="jalali-calendar-button" type="button" aria-label="انتخاب تاریخ شروع" data-date-picker-for="available-start">📅</button></div><input id="available-start-value"
+                                    name="available_from" type="hidden" value="{{ old('available_from') }}"><span id="available-start-hint"
+                                    class="field-hint">تاریخ را از تقویم شمسی انتخاب کنید.</span>
                             </div>
-                            <div class="field"><label for="available-end">در دسترس تا</label><input
-                                    class="form-control" id="available-end" name="available_untill" type="date" value="{{ old('available_untill') }}"><span
+                            <div class="field"><label for="available-end">در دسترس تا</label><div class="jalali-date-wrap"><input
+                                    class="form-control jalali-date-input" id="available-end" type="text" readonly
+                                    placeholder="۱۴۰۵/۰۶/۲۴" aria-describedby="available-end-hint" aria-haspopup="dialog" aria-expanded="false"><button
+                                    class="jalali-calendar-button" type="button" aria-label="انتخاب تاریخ پایان" data-date-picker-for="available-end">📅</button></div><input id="available-end-value"
+                                    name="available_untill" type="hidden" value="{{ old('available_untill') }}"><span id="available-end-hint"
+                                    class="field-hint">تاریخ را از تقویم شمسی انتخاب کنید.</span><span
                                     class="validation-message" id="date-error"></span></div>
                         </div>
+                        <div id="jalali-calendar" class="jalali-calendar" role="dialog" aria-label="تقویم شمسی" hidden></div>
                     </section>
 
                     <section class="form-section">

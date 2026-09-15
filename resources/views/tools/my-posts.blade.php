@@ -54,7 +54,7 @@
                         <p>{{ $post->description }}</p>
 
                         <div class="card-bottom">
-                            <span class="price">{{ $post->first_day_price }} تومان در روز</span>
+                            <span class="price">{{ \Illuminate\Support\Number::format($post->first_day_price, 0, null, 'fa') }} تومان در روز</span>
                             <a href="{{ route('posts.show', $post) }}">جزئیات</a>
                         </div>
 
