@@ -7,7 +7,7 @@
 
         <section class="intro">
             <p class="kicker">مدیریت سیستم</p>
-            <h1 class="display-font">Edit Role</h1>
+            <h1 class="display-font">ویرایش نقش</h1>
         </section>
 
         <div class="workspace">
@@ -21,7 +21,7 @@
                     <div class="field full-field">
 
                         <label for="name">
-                            Role Name
+                            نام نقش
                         </label>
 
                         <input
@@ -43,7 +43,7 @@
 
                     <div class="field full-field">
 
-                        <label>Permissions</label>
+                        <label>اختیارات</label>
 
                         @foreach ($permissions as $permission)
 
@@ -76,7 +76,7 @@
                 </div>
 
                 <button type="submit" class="button button-primary" style="margin-top:8px;">
-                    Update Role
+                    بروزرسانی نقش
                 </button>
 
             </form>

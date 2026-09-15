@@ -49,7 +49,7 @@
                 </div>
             @endcan
 
-            @if ($user->hasPermission('create-category') || $user->hasPermission('update-category') || $user->hasPermission('delete-category'))
+            @canany(['create-category', 'update-category', 'delete-category'])
                 <div class="form-card">
                     <h3 style="margin-top:0;">📁 مدیریت دسته‌بندی‌ها</h3>
                     <p style="color:var(--muted);">دسته‌بندی و زیردسته‌بندی ابزارها را بسازید یا ویرایش کنید.</p>
@@ -62,9 +62,9 @@
                         @endcan
                     </div>
                 </div>
-            @endif
+            @endcanany
 
-            @if ($user->hasPermission('create-role') || $user->hasPermission('update-role') || $user->hasPermission('delete-role'))
+            @canany(['create-role', 'update-role', 'delete-role'])
                 <div class="form-card">
                     <h3 style="margin-top:0;">🛡️ مدیریت نقش‌ها</h3>
                     <p style="color:var(--muted);">نقش‌ها و اختیارات (permission) هر نقش را تعریف کنید.</p>
@@ -77,15 +77,15 @@
                         @endcan
                     </div>
                 </div>
-            @endif
+            @endcanany
 
-            @if ($user->hasPermission('assign-role') || $user->hasPermission('manage-users'))
+            @canany(['assign-role', 'manage-users'])
                 <div class="form-card">
                     <h3 style="margin-top:0;">👥 مدیریت کاربران</h3>
                     <p style="color:var(--muted);">به کاربران نقش بدهید یا حساب‌های کاربری را مدیریت کنید.</p>
                     <a href="{{ route('users.index') }}" class="button button-primary" style="width:100%; text-align:center;">مدیریت کاربران</a>
                 </div>
-            @endif
+            @endcanany
 
         </div>
 

@@ -15,30 +15,35 @@
             <span class="logo-icon">🔧</span>
             ToolShare
         </a>
-        @hasSection('nav-links')
-            @yield('nav-links')
-        @else
-            <div class="nav-links">
-                <a href="{{ route('home') }}">خانه</a>
-                <a href="{{ route('posts.index') }}">مشاهده ابزارها</a>
-                @if (auth('api')->check())
-                    <a href="{{ route('panel') }}">پنل من</a>
-                @endif
-                <a href="#how">نحوه کار</a>
-            </div>
 
-        @endif
+
+        <div class="nav-links">
+            <a href="{{ route('home') }}">خانه</a>
+            <a href="{{ route('posts.index') }}">مشاهده ابزارها</a>
+            <a href="{{ route('categories.index') }}">مشاهده دسته بندی ها</a>
+            @yield('page-actions')
+        </div>
+
+
         <div class="nav-actions">
-            @hasSection('header-actions')
-                @yield('header-actions')
+            
+
+
+
+            @if (auth('api')->check())
+
+                <a class="btn btn-secondary" href="{{ route('panel') }}">پنل من</a>
+
+                <p>
+                    👤 {{ auth('api')->user()->first_name }}
+                </p>
+
             @else
-                <a class="btn btn-secondary" href="{{ route('login') }}">
-                    ورود
-                </a>
-                <a class="btn btn-primary" href="{{ route('signUp') }}">
-                    ثبت‌ نام
-                </a>
+
+                <a class="btn btn-secondary" href="{{ route('login') }}">ورود</a>
+                <a class="btn btn-primary" href="{{ route('signUp') }}">ثبت‌ نام</a>
             @endif
+
         </div>
     </nav>
 </header>

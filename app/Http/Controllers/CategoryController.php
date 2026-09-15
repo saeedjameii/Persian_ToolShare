@@ -48,6 +48,13 @@ class CategoryController extends Controller
             'parent_id' => 'nullable|exists:categories,id',
         ]);
 
+        if(!empty($data['parent_id'])){
+            $invalidParentIds = $category->descendants()->pluck('id')->push($category->id);
+            if($invalidParentIds->contains($data['parent_id'])){
+                abort(422, 'این دسته بندی نمی‌تواند والد انتخاب شده باشد');
+            }
+        }
+
         $category->update($data);
 
         return redirect()->route('categories.index')->with('success', 'دسته‌بندی مورد نظر با موفقیت ویرایش شد');

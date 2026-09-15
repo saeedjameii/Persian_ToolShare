@@ -7,11 +7,11 @@
 
         {{-- Header --}}
         <section class="intro" style="max-width:100%;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;">
-            <h1 class="display-font" style="font-size:clamp(2rem, 3.4vw, 3rem); margin:0;">Roles</h1>
+            <h1 class="display-font" style="font-size:clamp(2rem, 3.4vw, 3rem); margin:0;">نقش ها</h1>
 
             @can('permission', 'create-role')
                 <a href="{{ route('roles.create') }}" class="button button-primary">
-                    Create Role
+                    ساخت نقش
                 </a>
             @endcan
         </section>
@@ -55,7 +55,7 @@
                                     href="{{ route('roles.edit', $role) }}"
                                     class="btn btn-secondary"
                                 >
-                                    Edit
+                                    ویرایش
                                 </a>
                             @endif
                         @endcan
@@ -81,7 +81,7 @@
                                         class="btn text-danger"
                                         style="border:1px solid var(--line); background:none;"
                                     >
-                                        Delete
+                                        حذف
                                     </button>
 
                                 </form>
@@ -99,7 +99,7 @@
                 <div style="margin-top:20px; border-top:1px solid var(--line); padding-top:16px;">
 
                     <h6 style="margin:0 0 12px; color:var(--muted);">
-                        Permissions
+                        اختیارات
                     </h6>
 
 
@@ -120,7 +120,7 @@
                     @else
 
                         <p style="color:var(--muted); margin:0;">
-                            This role has no permissions.
+                            این نقش هیچ اختیاری ندارد
                         </p>
 
                     @endif
@@ -132,7 +132,7 @@
         @empty
 
             <div class="alert alert-info" style="margin-top:24px;">
-                No roles found.
+                هیچ نقشی یافت نشد
             </div>
 
         @endforelse
