@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\IranCity;
+use App\Models\IranProvince;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class PostController extends Controller
@@ -17,7 +20,12 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::whereDoesntHave('children')->with('parent')->get();
-        return view('tools.create', compact('categories'));
+        $provinces = IranProvince::orderBy('name')->get(['id', 'name']);
+        return view('tools.create', compact('categories', 'provinces'));
+    }
+
+    public function citiesByProvince(IranProvince $province){
+        return $province->cities()->orderBy('name')->get(['id', 'name']);
     }
 
     public function createPost(Request $request){
@@ -28,7 +36,8 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
 
             'condition' => 'required|string',
-            'location' => 'required|string',
+            'province_id' => 'required|exists:iran_provinces,id',
+            'city_id' => ['required', Rule::exists('iran_cities', 'id')->where(fn ($query) => $query->where('province_id', $request->input('province_id')))],
 
             'first_day_price' => 'nullable|numeric|min:0',
             'extra_day_price' => 'nullable|numeric|min:0',
@@ -102,8 +111,9 @@ class PostController extends Controller
         Gate::authorize('update', $post);
         
         $categories = Category::WhereDoesntHave('children')->with('parent')->get();
+        $provinces = IranProvince::orderBy('name')->get(['id', 'name']);
 
-        return view('tools.edit', compact('post', 'categories'));
+        return view('tools.edit', compact('post', 'categories', 'provinces'));
     }
 
     public function update(Request $request, Post $post){
@@ -116,7 +126,8 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
 
             'condition' => 'required|string',
-            'location' => 'required|string',
+            'province_id' => 'required|exists:iran_provinces,id',
+            'city_id' => ['required', Rule::exists('iran_cities', 'id')->where(fn ($query) => $query->where('province_id', $request->input('province_id')))],
 
             'first_day_price' => 'nullable|numeric|min:0',
             'extra_day_price' => 'nullable|numeric|min:0',

@@ -87,14 +87,23 @@
 
 
                     <div class="field">
-                        <label>موقعیت</label>
+                        <label for="edit-province-id">استان</label>
+                        <select class="form-control" id="edit-province-id" name="province_id" data-province-select data-city-select="edit-city-id"
+                            data-cities-url="{{ route('provinces.cities', ['province' => '__province__'], false) }}" required>
+                            <option value="">استان را انتخاب کنید</option>
+                            @foreach ($provinces as $province)
+                                <option value="{{ $province->id }}" @selected(old('province_id', $post->province_id) == $province->id)>{{ $province->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('province_id')<span class="validation-message" style="display:block;">{{ $message }}</span>@enderror
+                    </div>
 
-                        <input
-                            class="form-control"
-                            type="text"
-                            name="location"
-                            value="{{ old('location', $post->location) }}"
-                        >
+                    <div class="field">
+                        <label for="edit-city-id">شهر</label>
+                        <select class="form-control" id="edit-city-id" name="city_id" data-selected-city="{{ old('city_id', $post->city_id) }}" disabled required>
+                            <option value="">ابتدا استان را انتخاب کنید</option>
+                        </select>
+                        @error('city_id')<span class="validation-message" style="display:block;">{{ $message }}</span>@enderror
                     </div>
 
 

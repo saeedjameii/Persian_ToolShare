@@ -23,6 +23,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/create', [PostController::class, 'create'])->middleware('permission:create-post')->name('create_post');
 Route::post('/create', [PostController::class, 'createPost'])->middleware('permission:create-post')->name('create_post.post');
+Route::get('/provinces/{province}/cities', [PostController::class, 'citiesByProvince'])->name('provinces.cities');
 
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::get('/my-posts', [PostController::class, 'myPosts'])->middleware(JwtCookieMiddleware::class)->name('posts.mine');

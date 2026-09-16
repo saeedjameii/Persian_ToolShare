@@ -15,7 +15,7 @@
             @endif
         @endfor
 
-\        @if ($paginator->hasMorePages())
+        @if ($paginator->hasMorePages())
             <a href="{{ $paginator->nextPageUrl() }}" class="page-link">بعدی</a>
         @else
             <span class="page-link page-link-disabled">بعدی</span>

@@ -19,6 +19,14 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function province(){
+        return $this->belongsTo(IranProvince::class, 'province_id');
+    }
+
+    public function city(){
+        return $this->belongsTo(IranCity::class, 'city_id');
+    }
+
     public function images(){
         return $this->morphMany(Image::class, 'imageable');
     }

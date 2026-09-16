@@ -4,7 +4,8 @@ const title = document.getElementById("tool-title");
 const description = document.getElementById("description");
 const category = document.getElementById("category");
 const condition = document.getElementById("condition");
-const locationInput = document.getElementById("location");
+const provinceInput = document.getElementById("province-id");
+const cityInput = document.getElementById("city-id");
 const firstDay = document.getElementById("first-day-price");
 const extraDay = document.getElementById("extra-day-price");
 const firstDayValue = document.getElementById("first-day-price-value");
@@ -253,7 +254,7 @@ document.addEventListener("click", event => {
 function updatePreview(){
   previewTitle.textContent = title.value.trim() || "نام ابزار";
   previewCategory.textContent = category.value || "دسته‌بندی";
-  previewMeta.textContent = (condition.value || "شرایط") + " · " + (locationInput.value.trim() || "محل سکونت");
+  previewMeta.textContent = (condition.value || "شرایط") + " · " + (cityInput.selectedOptions[0]?.text || "شهر");
   previewPrice.textContent = currency(firstDay.value) + " روز اول · " + currency(extraDay.value) + " روز اضافی";
 }
 
@@ -293,7 +294,7 @@ function showPhotoPreviews(files){
   else photoStatus.textContent="";
 }
 
-[title,category,condition,locationInput].forEach(input=>{
+[title,category,condition,provinceInput,cityInput].forEach(input=>{
   input.addEventListener("input",updatePreview);
   input.addEventListener("change",updatePreview);
 });
@@ -308,6 +309,45 @@ initializeJalaliDateInput(startDate, startDateValue);
 initializeJalaliDateInput(endDate, endDateValue);
 updatePreview();
 }
+
+document.querySelectorAll("[data-province-select]").forEach(provinceSelect => {
+  const citySelect = document.getElementById(provinceSelect.dataset.citySelect);
+  const selectedCityId = citySelect.dataset.selectedCity;
+
+  function setCityPlaceholder(text) {
+    citySelect.replaceChildren(new Option(text, ""));
+  }
+
+  async function loadCities(provinceId, cityId = "") {
+    if (!provinceId) {
+      setCityPlaceholder("ابتدا استان را انتخاب کنید");
+      citySelect.disabled = true;
+      return;
+    }
+
+    setCityPlaceholder("در حال دریافت شهرها...");
+    citySelect.disabled = true;
+
+    try {
+      const response = await fetch(provinceSelect.dataset.citiesUrl.replace("__province__", encodeURIComponent(provinceId)), {
+        headers: { Accept: "application/json" },
+      });
+      if (!response.ok) throw new Error("Unable to load cities");
+
+      const cities = await response.json();
+      setCityPlaceholder("شهر را انتخاب کنید");
+      cities.forEach(city => citySelect.add(new Option(city.name, city.id, false, String(city.id) === String(cityId))));
+      citySelect.disabled = false;
+      citySelect.dispatchEvent(new Event("change"));
+    } catch (error) {
+      setCityPlaceholder("دریافت شهرها ناموفق بود");
+      citySelect.disabled = true;
+    }
+  }
+
+  provinceSelect.addEventListener("change", () => loadCities(provinceSelect.value));
+  if (provinceSelect.value) loadCities(provinceSelect.value, selectedCityId);
+});
 
 const birthDateDisplay = document.getElementById("birth-date-display");
 if (birthDateDisplay) {
