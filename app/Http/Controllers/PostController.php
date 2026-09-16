@@ -78,7 +78,7 @@ class PostController extends Controller
             $query->where('category_id', $request->category_id);
         }
 
-        $posts = $query->paginate(9)->withQueryString();
+        $posts = $query->paginate(8)->withQueryString();
 
         $categories = Category::whereDoesntHave('children')->get();
 

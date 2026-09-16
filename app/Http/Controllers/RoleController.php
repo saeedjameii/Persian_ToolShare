@@ -35,6 +35,9 @@ class RoleController extends Controller
     }
 
     public function edit(Role $role){
+        if($role->name === 'creator'){
+            abort(403, 'شما نمیتوانید نقش سازنده را ویرایش کنید');
+        }
         $permissions = Permission::where('name', '!=', 'create-role')->get();
 
         $rolePermissions = $role->permissions->pluck('id')->toArray();
