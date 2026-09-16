@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoleRequest;
 use App\Models\Permission;
 use App\Models\Role;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
@@ -18,13 +17,7 @@ class RoleController extends Controller
         return view('roles.create', compact('permissions'));
     }
     
-    public function store(Request $request){
-        $request->validate([
-            'name' => 'required|string|max:255|unique:roles,name',
-            'permissions' => 'required|array',
-            'permissions.*' => 'exists:permissions,id'
-        ]);
-
+    public function store(RoleRequest $request){
         $role = Role::create([
             'name' => $request->name,
         ]);
@@ -47,20 +40,10 @@ class RoleController extends Controller
         ));
     }
 
-    public function update(Request $request, Role $role){
+    public function update(RoleRequest $request, Role $role){
         if($role->name === 'creator'){
             abort(403, 'شما نمیتوانید نقش سازنده را ویرایش کنید');
         }
-        $createRolePermissionId = Permission::where('name', 'create-role')->value('id');
-
-        $request->validate([
-            'name' => 'required|string|max:250|unique:roles,name,' . $role->id,
-            'permissions' => 'required|array',
-            'permissions.*' => [
-                'exists:permissions,id',
-                Rule::notIn([$createRolePermissionId]),
-            ],
-        ]);
 
         $role->update([
             'name' => $request->name,

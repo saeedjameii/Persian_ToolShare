@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
 use App\Models\Category;
-use App\Models\IranCity;
 use App\Models\IranProvince;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Validation\Rule;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class PostController extends Controller
@@ -28,26 +27,8 @@ class PostController extends Controller
         return $province->cities()->orderBy('name')->get(['id', 'name']);
     }
 
-    public function createPost(Request $request){
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-
-            'category_id' => 'required|exists:categories,id',
-
-            'condition' => 'required|string',
-            'province_id' => 'required|exists:iran_provinces,id',
-            'city_id' => ['required', Rule::exists('iran_cities', 'id')->where(fn ($query) => $query->where('province_id', $request->input('province_id')))],
-
-            'first_day_price' => 'nullable|numeric|min:0',
-            'extra_day_price' => 'nullable|numeric|min:0',
-
-            'available_from' => 'nullable|date',
-            'available_untill' => 'nullable|date|after_or_equal:available_from',
-
-            'images' => 'required|array|max:5',
-            'images.*' => 'image|max:5120',
-        ]);
+    public function createPost(PostRequest $request){
+        $data = $request->validated();
 
         $images = $request->file('images');
 
@@ -127,25 +108,10 @@ class PostController extends Controller
         return view('tools.edit', compact('post', 'categories', 'provinces'));
     }
 
-    public function update(Request $request, Post $post){
+    public function update(PostRequest $request, Post $post){
         Gate::authorize('update', $post);
 
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-
-            'category_id' => 'required|exists:categories,id',
-
-            'condition' => 'required|string',
-            'province_id' => 'required|exists:iran_provinces,id',
-            'city_id' => ['required', Rule::exists('iran_cities', 'id')->where(fn ($query) => $query->where('province_id', $request->input('province_id')))],
-
-            'first_day_price' => 'nullable|numeric|min:0',
-            'extra_day_price' => 'nullable|numeric|min:0',
-
-            'available_from' => 'nullable|date',
-            'available_untill' => 'nullable|date|after_or_equal:available_from',
-        ]);
+        $data = $request->validated();
 
         $post->update($data);
 

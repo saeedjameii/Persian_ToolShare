@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRoleRequest;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class UserRoleController extends Controller
 {
@@ -15,13 +15,8 @@ class UserRoleController extends Controller
         return view('admin.users.index', compact('users', 'roles'));
     }
 
-    public function update(Request $request, User $user){
-
-        $data = $request->validate([
-            'role_ids' => 'required|array',
-            'role_ids.*' => 'exists:roles,id'
-        ]);
-
+    public function update(UserRoleRequest $request, User $user){
+        $data = $request->validated();
         $creatorRole = Role::where('name', 'creator')->first();
 
         if($user->hasRole('creator')){
@@ -54,14 +49,15 @@ class UserRoleController extends Controller
         $user = User::withTrashed()->findOrFail($id);
 
         if (!$user->trashed()) {
-        return back()->withErrors([
-            'user' => 'این کاربر حذف نشده است.'
-        ]);
-    }
+            return back()->withErrors([
+                'user' => 'این کاربر حذف نشده است.'
+            ]);
+        }
 
         if($user->hasRole('creator')){
             abort(403, 'نقش creator قابل بازگشت نمی‌باشد');
         }
+        
         $user->restore();
         return back()->with('success', 'کاربر با موفقیت بازیابی شد');
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class CategoryController extends Controller
         return view('categories.create', compact('categories'));
     }
 
-    public function store(Request $request){
+    public function store(CategoryRequest $request){
         // dd($request->all());
         $data = $request->validate([
             'name' => 'required|max:250|string',
@@ -42,7 +43,7 @@ class CategoryController extends Controller
         return view('categories.edit',compact('category', 'categories'));
     }
 
-    public function update(Request $request, Category $category){
+    public function update(CategoryRequest $request, Category $category){
         $data = $request->validate([
             'name' => 'required|max:250|string',
             'parent_id' => 'nullable|exists:categories,id',

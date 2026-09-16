@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\SignUpRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,18 +19,8 @@ class AuthController extends Controller
         return view('auth.signUp');
     }
 
-    public function signUpPost(Request $request)
+public function signUpPost(SignUpRequest $request) 
     {
-
-        $request->validate([
-            'first_name' => 'required|max:20',
-            'last_name' => 'required|max:20',
-            'email' => 'required|email|unique:users',
-            'phone_number' => 'required|size:11|regex:/^09[0-9]{9}$/|unique:users',
-            'birth_date' => 'required|regex:/^[0-9]{4}\/[0-9]{2}\/[0-9]{2}$/',
-            'national_code' => 'required|size:10|regex:/^[0-9]{10}$/|unique:users',
-            'password' => 'required|min:8|confirmed',
-        ]);
 
         try {
             $jalaliDate = Jalalian::fromFormat('Y/m/d', $request->birth_date);
@@ -70,14 +62,8 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function loginPost(Request $request)
+    public function loginPost(LoginRequest $request)
     {
-
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
         $user = User::where('email', $request->email)->first();
 
         if (! $user || $user->trashed()) {
