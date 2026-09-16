@@ -23,17 +23,37 @@
                 <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                 @endforeach
             </select>
-            <select class="select">
-              <option>همه مکان‌ها</option>
-                @foreach ($posts->pluck('location')->unique() as $location)
-                    <option value="{{ $location }}">{{ $location }}</option>
+            <select
+                class="select"
+                name="province_id"
+                data-province-select
+                data-city-select="search-city-id"
+                data-cities-url="{{ route('provinces.cities', ['province' => '__province__'], false) }}"
+            >
+                <option value="">همه استان‌ها</option>
+
+                @foreach ($provinces as $province)
+                    <option
+                        value="{{ $province->id }}"
+                        @selected(request('province_id') == $province->id)
+                    >
+                        {{ $province->name }}
+                    </option>
                 @endforeach
-            </select
-            ><select class="select">
-              <option>توصیه‌شده</option>
-              <option>کمترین قیمت</option>
-              <option>جدیدترین</option>
             </select>
+
+            <select
+                class="select"
+                id="search-city-id"
+                name="city_id"
+                data-selected-city="{{ request('city_id') }}"
+                disabled
+            >
+                <option value="">ابتدا استان را انتخاب کنید</option>
+            </select>
+            <button class="button button-primary search-submit" type="submit">
+                جست‌وجو
+            </button>
           </form>
         </div>
       </section>

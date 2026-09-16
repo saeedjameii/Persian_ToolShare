@@ -80,8 +80,11 @@
 
                     <div class="spec-row">
                         <strong>موقعیت:</strong>
-
-                        <span>{{ $post->location }}</span>
+                    <span>
+                        {{ $post->province?->name ?? '—' }}
+                        -
+                        {{ $post->city?->name ?? '—' }}
+                    </span>
                     </div>
 
                     <div class="spec-row">

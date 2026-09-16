@@ -74,24 +74,34 @@ class PostController extends Controller
     }
     public function index(Request $request){
         
-        $query = Post::with(['category', 'images', 'user'])->latest();
+        $query = Post::with(['category', 'images', 'user', 'province', 'city'])->latest();
 
         if($request->filled('search')){
             $search = $request->search;
 
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")->orWhere('description', 'like', "%{$search}%");
+            $query->where(function ($query) use ($search) {
+                $query->where('title', 'like', "%{$search}%")->orWhere('description', 'like', "%{$search}%");
             });
         }
         if($request->filled('category_id')){
             $query->where('category_id', $request->category_id);
         }
 
+        if($request->filled('province_id')){
+            $query->where('province_id', $request->province_id);
+        }
+
+        if($request->filled('city_id')){
+            $query->where('city_id', $request->city_id);
+        }
+
         $posts = $query->paginate(8)->withQueryString();
 
         $categories = Category::whereDoesntHave('children')->get();
 
-        return view('tools.index', compact('posts', 'categories'));
+        $provinces = IranProvince::orderBy('name')->get(['id', 'name']);
+
+        return view('tools.index', compact('posts', 'categories', 'provinces'));
     }
 
     public function myPosts(){
@@ -100,9 +110,10 @@ class PostController extends Controller
     }
 
     public function show(Post $post){
-        $post->load(['category', 'images', 'user']);
+        $provinces = IranProvince::orderBy('name')->get(['id', 'name']);
+        $post->load(['category', 'images', 'user', 'province', 'city']);
 
-        return view('tools.show', compact('post'));
+        return view('tools.show', compact('post', 'provinces'));
     }
 
     public function edit(Post $post)

@@ -73,7 +73,7 @@
                     </div>
 
 
-                    <div class="field">
+                    <div class="field full-field">
                         <label for="condition">شرایط ابزار</label>
                         <select class="form-control" id="condition" name="condition" >
                             <option value="{{ old('condition', $post->condition) }}">شرایط ابزار را انتخاب کنید</option>

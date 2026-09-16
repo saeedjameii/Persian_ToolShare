@@ -934,3 +934,15 @@ a:focus-visible { outline: 3px solid rgba(41, 93, 67, 0.22); outline-offset: 2px
   color: #b7c0b3;
   cursor: default;
 }
+
+.search-submit {
+  min-height: 44px;
+  padding-inline: 22px;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .search-submit {
+    width: 100%;
+  }
+}
