@@ -19,7 +19,7 @@ class AuthController extends Controller
         return view('auth.signUp');
     }
 
-public function signUpPost(SignUpRequest $request) 
+    public function signUpPost(SignUpRequest $request) 
     {
 
         try {

@@ -24,10 +24,7 @@ class CategoryController extends Controller
 
     public function store(CategoryRequest $request){
         // dd($request->all());
-        $data = $request->validate([
-            'name' => 'required|max:250|string',
-            'parent_id' => 'nullable|exists:categories,id',
-        ]);
+        $data = $request->validated();
 
         Category::create($data);
 
@@ -44,10 +41,7 @@ class CategoryController extends Controller
     }
 
     public function update(CategoryRequest $request, Category $category){
-        $data = $request->validate([
-            'name' => 'required|max:250|string',
-            'parent_id' => 'nullable|exists:categories,id',
-        ]);
+        $data = $request->validated();
 
         if(!empty($data['parent_id'])){
             $invalidParentIds = $category->descendants()->pluck('id')->push($category->id);

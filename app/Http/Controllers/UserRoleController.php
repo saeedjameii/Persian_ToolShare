@@ -9,12 +9,13 @@ use App\Models\User;
 class UserRoleController extends Controller
 {
     public function index(){
+        
         $users = User::withTrashed()->with('roles')->orderBy('first_name')->get();
         $roles = Role::all();
 
         return view('admin.users.index', compact('users', 'roles'));
     }
-
+    
     public function update(UserRoleRequest $request, User $user){
         $data = $request->validated();
         $creatorRole = Role::where('name', 'creator')->first();
